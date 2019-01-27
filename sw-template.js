@@ -3,64 +3,7 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox
 if (workbox) {
     console.log(`Yay! Workbox is loaded 🎉`);
 
-    workbox.precaching.precacheAndRoute([
-  {
-    "url": "favicon.ico",
-    "revision": "0251fdb59b82f5f8f448fca84e94f357"
-  },
-  {
-    "url": "index.html",
-    "revision": "2e592b8403fc71d37477b0b5101af548"
-  },
-  {
-    "url": "manifest.json",
-    "revision": "839abadb6c74e82a34ae5cac52bc697c"
-  },
-  {
-    "url": "offline.html",
-    "revision": "7a2ff0fc24a0a6b1a125c98a3664a5ac"
-  },
-  {
-    "url": "src/css/app.css",
-    "revision": "574e324013279b516504023455b26b32"
-  },
-  {
-    "url": "src/css/feed.css",
-    "revision": "ef5b292641220d93e7923dc79c254969"
-  },
-  {
-    "url": "src/css/help.css",
-    "revision": "81922f16d60bd845fd801a889e6acbd7"
-  },
-  {
-    "url": "src/js/app.js",
-    "revision": "7c2fe4be27096194a1c1243b675891e5"
-  },
-  {
-    "url": "src/js/feed.js",
-    "revision": "33f562cd8a8942e79e167d6bd390b920"
-  },
-  {
-    "url": "src/lib/material.indigo-deep_orange.min.css",
-    "revision": "1b5a4a3c84a73a3a53654e9dd3ef70c0"
-  },
-  {
-    "url": "src/lib/material.min.js",
-    "revision": "e68511951f1285c5cbf4aa510e8a2faf"
-  },
-  {
-    "url": "src/images/main-image-lg.jpg",
-    "revision": "05b87e478ce30957f4e2f00b5c18f80a"
-  },
-  {
-    "url": "src/images/main-image-sm.jpg",
-    "revision": "6172dffd0848144bbc3f7504d8585058"
-  },
-  {
-    "url": "src/images/main-image.jpg",
-    "revision": "489ce4c1c7ebc7545aa528cea56e50c1"
-  }
-]);
+    workbox.precaching.precacheAndRoute([]);
 
     workbox.routing.registerRoute(
         /.*(?:googleapis|gstatic)\.com.*$/,
