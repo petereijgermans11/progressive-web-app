@@ -1,6 +1,7 @@
 const manifest = {
     "name": "Progressive Selfies",
-    "short_name": "PWA Selfies",
+    //"short_name": "PWA Selfies",
+    "short_name": "Moloz",
     "icons": [
         {
             "src": "src/images/icons/app-icon-48x48.png",
