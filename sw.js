@@ -74,6 +74,55 @@ if (workbox) {
             ]
         }));
 
+    // Cache the Google Fonts stylesheets with a stale-while-revalidate strategy.
+    // workbox.routing.registerRoute(
+    //     /^https:\/\/fonts\.googleapis\.com/,
+    //     workbox.strategies.staleWhileRevalidate({
+    //         cacheName: 'google-fonts-stylesheets',
+    //     })
+    // );
+
+    // Cache the underlying font files with a cache-first strategy for 1 year.
+    // workbox.routing.registerRoute(
+    //     /^https:\/\/fonts\.gstatic\.com/,
+    //     workbox.strategies.cacheFirst({
+    //         cacheName: 'google-fonts-webfonts',
+    //         plugins: [
+    //             new workbox.cacheableResponse.Plugin({
+    //                 statuses: [0, 200],
+    //             }),
+    //             new workbox.expiration.Plugin({
+    //                 maxAgeSeconds: 60 * 60 * 24 * 365,
+    //                 maxEntries: 30,
+    //             }),
+    //         ],
+    //     })
+    // );
+
+    workbox.routing.registerRoute(
+        new RegExp('/images/icons/*/'),
+        workbox.strategies.staleWhileRevalidate({
+            cacheName: 'icons-cache',
+            plugins: [
+                new workbox.expiration.Plugin({
+                    maxEntries: 5,
+                    maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+                })
+            ]
+        }));
+
+    workbox.routing.registerRoute(
+        new RegExp('/images/splashscreens/*/'),
+        workbox.strategies.staleWhileRevalidate({
+            cacheName: 'splashscreens-cache',
+            plugins: [
+                new workbox.expiration.Plugin({
+                    maxEntries: 1,
+                    maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+                })
+            ]
+        }));
+
     workbox.routing.registerRoute(
         routeData => routeData.event.request.headers.get('accept').includes('text/html'),
         args => {
