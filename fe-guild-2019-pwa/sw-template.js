@@ -1,4 +1,6 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js');
+importScripts('src/lib/idb.js');
+importScripts('src/js/utility.js');
 
 if (workbox) {
     console.log(`Yay! Workbox is loaded 🎉`);
@@ -65,6 +67,58 @@ if (workbox) {
                 })
             ]
         }));
+
+    workbox.routing.registerRoute(
+        new RegExp(`${SERVER_URL}/(images|dummy)/*`),
+        workbox.strategies.staleWhileRevalidate({
+            cacheName: 'selfie-images'
+        }));
+
+    workbox.routing.registerRoute(API_URL, args => {
+        return fetch(args.event.request)
+            .then(response => {
+                const clonedResponse = response.clone();
+                clearAllData('selfies')
+                    .then(() => clonedResponse.json())
+                    .then(selfies => {
+                        for (const selfie in selfies) {
+                            writeData('selfies', selfies[selfie]);
+                        }
+                    });
+                return response;
+            });
+    });
+
+    self.addEventListener('sync', event => {
+        console.log('[Service Worker] Background syncing', event);
+        if (event.tag === 'sync-new-selfies') {
+            console.log('[Service Worker] Syncing new Posts');
+            event.waitUntil(
+                readAllData('sync-selfies')
+                    .then(syncSelfies => {
+                        for (const syncSelfie of syncSelfies) {
+                            const postData = new FormData();
+                            postData.append('id', syncSelfie.id);
+                            postData.append('title', syncSelfie.title);
+                            postData.append('location', syncSelfie.location);
+                            postData.append('selfie', syncSelfie.selfie);
+
+                            fetch(API_URL, {method: 'POST', body: postData})
+                                .then(response => {
+                                    console.log('Sent data', response);
+                                    if (response.ok) {
+                                        response.json()
+                                            .then(resData => {
+                                                deleteItemFromData('sync-selfies', parseInt(resData.id));
+                                            });
+                                    }
+                                })
+                                .catch(error => console.log('Error while sending data', error));
+                        }
+                    })
+            );
+        }
+    });
 
     workbox.routing.registerRoute(
         routeData => routeData.event.request.headers.get('accept').includes('text/html'),

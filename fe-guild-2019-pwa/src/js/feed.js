@@ -8,8 +8,6 @@ const sharedMomentsArea = document.querySelector('#shared-moments');
 const imagePicker = document.querySelector('#image-picker');
 let picture;
 
-const API_URL = 'http://192.168.1.162:3000/selfies';
-
 const openCreatePostModal = () => {
     createPostArea.style.transform = 'translateY(0)';
 
@@ -90,27 +88,62 @@ form.addEventListener('submit', event => {
 
     closeCreatePostModal();
 
-    const postData = new FormData();
-    postData.append('title', titleInput.value);
-    postData.append('location', locationInput.value);
-    postData.append('selfie', picture);
+    const id = new Date().getTime();
 
-    fetch(API_URL, {method: 'POST', body: postData})
-        .then(response => {
-            console.log('Sent data', response);
-        });
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        navigator.serviceWorker.ready
+            .then(sw => {
+                const selfie = {
+                    id: id,
+                    title: titleInput.value,
+                    location: locationInput.value,
+                    selfie: picture,
+                };
+                writeData('sync-selfies', selfie)
+                    .then(() => sw.sync.register('sync-new-selfies'))
+                    .then(() => {
+                        const snackbarContainer = document.querySelector('#confirmation-toast');
+                        const data = {message: 'Your Selfie was saved for syncing!'};
+                        snackbarContainer.MaterialSnackbar.showSnackbar(data);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            });
+    } else {
+        const postData = new FormData();
+        postData.append('id', id);
+        postData.append('title', titleInput.value);
+        postData.append('location', locationInput.value);
+        postData.append('selfie', picture);
+
+        fetch(API_URL, {method: 'POST', body: postData})
+            .then(response => console.log('Sent data', response));
+    }
 });
 
 imagePicker.addEventListener('change', event => picture = event.target.files[0]);
 
+let networkDataReceived = false;
 fetch(API_URL)
-    .then(response=> response.json())
+    .then(response => response.json())
     .then(data => {
         console.log('From server', data);
+        networkDataReceived = true;
         const selfies = [];
         for (const key in data) {
             selfies.push(data[key]);
         }
         updateUI(selfies);
     });
+
+if ('indexedDB' in window) {
+    readAllData('selfies')
+        .then(selfies => {
+            if (!networkDataReceived) {
+                console.log('From cache', selfies);
+                updateUI(selfies);
+            }
+        });
+}
 
