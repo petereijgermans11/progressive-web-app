@@ -30,3 +30,36 @@
     display: block;
     margin: 10px auto;
 }
+
+.shared-moment-card.mdl-card {
+    margin: 10px auto;
+    width: 80%;
+}
+
+@media (min-width: 600px) {
+    .shared-moment-card.mdl-card {
+        width: 60%;
+    }
+}
+
+@media (min-width: 1000px) {
+    .shared-moment-card.mdl-card {
+        width: 45%;
+    }
+}
+
+.shared-moment-card .mdl-card__title {
+    height: 140px;
+}
+
+@media (min-height: 700px) {
+    .shared-moment-card .mdl-card__title {
+        height: 160px;
+    }
+}
+
+@media (min-height: 1000px) {
+    .shared-moment-card .mdl-card__title {
+        height: 200px;
+    }
+}

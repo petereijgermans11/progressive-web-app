@@ -10,7 +10,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "2e592b8403fc71d37477b0b5101af548"
+    "revision": "95954a9987d4d502df380c84503ff8c9"
   },
   {
     "url": "manifest.json",
@@ -26,7 +26,7 @@ if (workbox) {
   },
   {
     "url": "src/css/feed.css",
-    "revision": "ef5b292641220d93e7923dc79c254969"
+    "revision": "333d4e1ecac6964d10c03e676220a2d8"
   },
   {
     "url": "src/css/help.css",
@@ -38,7 +38,7 @@ if (workbox) {
   },
   {
     "url": "src/js/feed.js",
-    "revision": "33f562cd8a8942e79e167d6bd390b920"
+    "revision": "731ef0036f10d590af7973b5436dc6ac"
   },
   {
     "url": "src/lib/material.indigo-deep_orange.min.css",
