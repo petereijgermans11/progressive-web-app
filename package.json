@@ -21,5 +21,6 @@
         "gh-pages": "^2.0.1",
         "http-server": "^0.11.1",
         "workbox-cli": "^3.6.3"
-    }
+    },
+    "dependencies": {}
 }

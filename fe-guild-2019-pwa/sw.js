@@ -1,4 +1,6 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js');
+importScripts('src/lib/idb.js');
+importScripts('src/js/utility.js');
 
 if (workbox) {
     console.log(`Yay! Workbox is loaded 🎉`);
@@ -10,7 +12,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "95954a9987d4d502df380c84503ff8c9"
+    "revision": "e1bba6b63555bbdec61436000024d72a"
   },
   {
     "url": "manifest.json",
@@ -26,7 +28,7 @@ if (workbox) {
   },
   {
     "url": "src/css/feed.css",
-    "revision": "333d4e1ecac6964d10c03e676220a2d8"
+    "revision": "9a683ea9c6fb0e77e78db33c51b987f7"
   },
   {
     "url": "src/css/help.css",
@@ -38,7 +40,15 @@ if (workbox) {
   },
   {
     "url": "src/js/feed.js",
-    "revision": "731ef0036f10d590af7973b5436dc6ac"
+    "revision": "6de46fccf2293789ec8281549abb448f"
+  },
+  {
+    "url": "src/js/utility.js",
+    "revision": "e136e618f44bbbc509e9e837cbe3be35"
+  },
+  {
+    "url": "src/lib/idb.js",
+    "revision": "e0cc55c458ad9e2803ff7605286577c0"
   },
   {
     "url": "src/lib/material.indigo-deep_orange.min.css",
@@ -122,6 +132,58 @@ if (workbox) {
                 })
             ]
         }));
+
+    workbox.routing.registerRoute(
+        new RegExp(`${SERVER_URL}/(images|dummy)/*`),
+        workbox.strategies.staleWhileRevalidate({
+            cacheName: 'selfie-images'
+        }));
+
+    workbox.routing.registerRoute(API_URL, args => {
+        return fetch(args.event.request)
+            .then(response => {
+                const clonedResponse = response.clone();
+                clearAllData('selfies')
+                    .then(() => clonedResponse.json())
+                    .then(selfies => {
+                        for (const selfie in selfies) {
+                            writeData('selfies', selfies[selfie]);
+                        }
+                    });
+                return response;
+            });
+    });
+
+    self.addEventListener('sync', event => {
+        console.log('[Service Worker] Background syncing', event);
+        if (event.tag === 'sync-new-selfies') {
+            console.log('[Service Worker] Syncing new Posts');
+            event.waitUntil(
+                readAllData('sync-selfies')
+                    .then(syncSelfies => {
+                        for (const syncSelfie of syncSelfies) {
+                            const postData = new FormData();
+                            postData.append('id', syncSelfie.id);
+                            postData.append('title', syncSelfie.title);
+                            postData.append('location', syncSelfie.location);
+                            postData.append('selfie', syncSelfie.selfie);
+
+                            fetch(API_URL, {method: 'POST', body: postData})
+                                .then(response => {
+                                    console.log('Sent data', response);
+                                    if (response.ok) {
+                                        response.json()
+                                            .then(resData => {
+                                                deleteItemFromData('sync-selfies', parseInt(resData.id));
+                                            });
+                                    }
+                                })
+                                .catch(error => console.log('Error while sending data', error));
+                        }
+                    })
+            );
+        }
+    });
 
     workbox.routing.registerRoute(
         routeData => routeData.event.request.headers.get('accept').includes('text/html'),
