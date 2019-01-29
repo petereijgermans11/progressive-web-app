@@ -1,5 +1,5 @@
 // TODO: Change this with your own local IP (either localhost/127.0.0.1) or the IP assigned by the phone hot spot
-const SERVER_URL = 'http://192.168.1.162:3000';
+const SERVER_URL = 'http://172.20.10.4:3000';
 const API_URL = `${SERVER_URL}/selfies`;
 
 const dbPromise = idb.openDb('selfies-store', 1, upgradeDB => {
