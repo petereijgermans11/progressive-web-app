@@ -24,7 +24,7 @@ if (workbox) {
   },
   {
     "url": "src/css/app.css",
-    "revision": "574e324013279b516504023455b26b32"
+    "revision": "b77ac80c333cecdf14a1963888a8c6ec"
   },
   {
     "url": "src/css/feed.css",
@@ -36,7 +36,7 @@ if (workbox) {
   },
   {
     "url": "src/js/app.js",
-    "revision": "7c2fe4be27096194a1c1243b675891e5"
+    "revision": "dd3690acac938933481db52fcd48e7ba"
   },
   {
     "url": "src/js/feed.js",
@@ -227,3 +227,20 @@ if (workbox) {
 } else {
     console.log(`Boo! Workbox didn't load 😬`);
 }
+
+self.addEventListener('notificationclick', event => {
+    const notification = event.notification;
+    const action = event.action;
+
+    console.log(notification);
+
+    if (action === 'confirm') {
+        console.log('Confirm was chosen');
+        notification.close();
+    } else {
+        console.log(action);
+        notification.close();
+    }
+});
+
+self.addEventListener('notificationclose', event => console.log('Notification was closed', event));
