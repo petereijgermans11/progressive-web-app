@@ -147,3 +147,16 @@ if ('indexedDB' in window) {
         });
 }
 
+// if ('serviceWorker' in navigator && 'SyncManager' in window) {
+//     navigator.serviceWorker.ready.then(sw => {
+//         sw.periodicSync.register({
+//             tag: 'get-latest-selfies',
+//             minPeriod: 12 * 60 * 60 * 1000,
+//             powerState: 'avoid-draining',
+//             networkState: 'avoid-cellular'
+//         })
+//             .then(periodicSyncReg => console.log('Success!'))
+//             .catch(error => console.log('Error', error))
+//     });
+// }
+
