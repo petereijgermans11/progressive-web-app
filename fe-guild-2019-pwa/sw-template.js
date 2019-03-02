@@ -173,9 +173,46 @@ self.addEventListener('notificationclick', event => {
         console.log('Confirm was chosen');
         notification.close();
     } else {
+        event.waitUntil(
+            self.clients.matchAll()
+                .then(clients => {
+                    let visibleClient = clients.find(client => client.visibilityState === 'visible');
+
+                    if (visibleClient && 'navigate' in visibleClient) {
+                        visibleClient.navigate(notification.data.url);
+                        visibleClient.focus();
+                    } else {
+                        self.clients.openWindow(`fe-guild-2019-pwa/${notification.data.url}`);
+                    }
+                    notification.close();
+                })
+        );
         console.log(action);
         notification.close();
     }
 });
 
 self.addEventListener('notificationclose', event => console.log('Notification was closed', event));
+
+self.addEventListener('push', event => {
+    console.log('Push Notification received', event);
+
+    let data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
+
+    if (event.data) {
+        data = JSON.parse(event.data.text());
+    }
+
+    const options = {
+        body: data.content,
+        icon: 'src/images/icons/app-icon-96x96.png',
+        badge: 'src/images/icons/app-icon-96x96.png',
+        data: {
+            url: data.openUrl
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
