@@ -126,6 +126,62 @@ const displayConfirmNotification = () => {
     }
 };
 
+const configurePushSubscription = () => {
+    if ('serviceWorker' in navigator) {
+        let serviceWorkerRegistration;
+        navigator.serviceWorker.ready
+            .then(registration => {
+                serviceWorkerRegistration = registration;
+                return registration.pushManager.getSubscription();
+            })
+            .then(subscription => {
+                if (subscription === null) {
+                    // Create a new subscription
+                    return serviceWorkerRegistration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array(
+                            'BGMYWA_g_tpLeOXlR4oykccGE00remgS_-2PrH2WjgWrg93lPDsjnJ0pDKmuGaAfbzuOtvkUWK-CivusHQdL0BE'
+                        )
+                    });
+                }
+            })
+            .then(pushSubscription => {
+                return fetch(`${SERVER_URL}/subscriptions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(pushSubscription)
+                });
+            })
+            .then(response => {
+                if (response.ok) {
+                    displayConfirmNotification();
+                }
+            })
+            .catch(error => console.log(error));
+    }
+};
+
+const unsubscribe = () => {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready
+            .then(serviceWorkerRegistration => {
+                return serviceWorkerRegistration.pushManager.getSubscription();
+            })
+            .then(subscription => {
+                if (!subscription) {
+                    console.log("Not subscribed, nothing to do.");
+                    return;
+                }
+                return subscription.unsubscribe();
+            })
+            .then(() => console.log("Successfully unsubscribed!.")
+            .catch(error => console.error('Error thrown while unsubscribing from push messaging', error));
+    }
+};
+
 const askForNotificationPermission = () => {
     Notification.requestPermission(result => {
         console.log('User Choice', result);
@@ -133,7 +189,8 @@ const askForNotificationPermission = () => {
             console.log('No notification permission granted!');
         } else {
             console.log('Notification permission granted!');
-            displayConfirmNotification();
+            // displayConfirmNotification();
+            configurePushSubscription();
         }
     });
 };

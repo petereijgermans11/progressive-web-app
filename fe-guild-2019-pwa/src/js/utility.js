@@ -1,6 +1,7 @@
 // TODO: Change this with your own local IP (either localhost/127.0.0.1) or the IP assigned by the phone hot spot
-const SERVER_URL = 'http://172.20.10.4:3000';
+const SERVER_URL = 'http://192.168.1.162:3000';
 const API_URL = `${SERVER_URL}/selfies`;
+let BASE_URL = '';
 
 const dbPromise = idb.openDb('selfies-store', 1, upgradeDB => {
     if (!upgradeDB.objectStoreNames.contains('selfies')) {
@@ -50,4 +51,19 @@ const deleteItemFromData = (storeName, id) => {
             return tx.complete;
         })
         .then(() => console.log('Item deleted!'));
+};
+
+const urlBase64ToUint8Array = base64String => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
 };

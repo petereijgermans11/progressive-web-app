@@ -24,7 +24,7 @@ if (workbox) {
   },
   {
     "url": "src/css/app.css",
-    "revision": "b77ac80c333cecdf14a1963888a8c6ec"
+    "revision": "078758ce0ac18d3ff6180aa4844244ab"
   },
   {
     "url": "src/css/feed.css",
@@ -36,15 +36,15 @@ if (workbox) {
   },
   {
     "url": "src/js/app.js",
-    "revision": "dd3690acac938933481db52fcd48e7ba"
+    "revision": "867f91eebbb4af800fff4277dec4b728"
   },
   {
     "url": "src/js/feed.js",
-    "revision": "cc8358ab0d13b660e9b50f8e1504d4c7"
+    "revision": "9c3196ce4b51edb3ce2aa756fa615109"
   },
   {
     "url": "src/js/utility.js",
-    "revision": "7720639bbb9ac98fcd7febc9dd54ae23"
+    "revision": "fe2feed98722cdd659efb4eb15c4804a"
   },
   {
     "url": "src/lib/idb.js",
@@ -238,9 +238,46 @@ self.addEventListener('notificationclick', event => {
         console.log('Confirm was chosen');
         notification.close();
     } else {
+        event.waitUntil(
+            self.clients.matchAll()
+                .then(clients => {
+                    let visibleClient = clients.find(client => client.visibilityState === 'visible');
+
+                    if (visibleClient && 'navigate' in visibleClient) {
+                        visibleClient.navigate(notification.data.url);
+                        visibleClient.focus();
+                    } else {
+                        self.clients.openWindow(`fe-guild-2019-pwa/${notification.data.url}`);
+                    }
+                    notification.close();
+                })
+        );
         console.log(action);
         notification.close();
     }
 });
 
 self.addEventListener('notificationclose', event => console.log('Notification was closed', event));
+
+self.addEventListener('push', event => {
+    console.log('Push Notification received', event);
+
+    let data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
+
+    if (event.data) {
+        data = JSON.parse(event.data.text());
+    }
+
+    const options = {
+        body: data.content,
+        icon: 'src/images/icons/app-icon-96x96.png',
+        badge: 'src/images/icons/app-icon-96x96.png',
+        data: {
+            url: data.openUrl
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
