@@ -29,11 +29,13 @@ const initializeMedia = () => {
         };
     }
 
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    navigator.mediaDevices.getUserMedia({video: { facingMode: 'user'}, audio: false})
         .then(stream => {
-            const videoTracks = stream.getVideoTracks();
             videoPlayer.srcObject = stream;
             videoPlayer.style.display = 'block';
+            videoPlayer.setAttribute('autoplay', '');
+            videoPlayer.setAttribute('muted', '');
+            videoPlayer.setAttribute('playsinline', '');
         })
         .catch(error => {
             console.log(error);
