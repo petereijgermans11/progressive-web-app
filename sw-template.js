@@ -1,4 +1,6 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js');
+importScripts('src/lib/idb.js');
+importScripts('src/js/utility.js');
 
 if (workbox) {
     console.log(`Yay! Workbox is loaded 🎉`);
@@ -67,6 +69,58 @@ if (workbox) {
         }));
 
     workbox.routing.registerRoute(
+        new RegExp(`${SERVER_URL}/(images|dummy)/*`),
+        workbox.strategies.staleWhileRevalidate({
+            cacheName: 'selfie-images'
+        }));
+
+    workbox.routing.registerRoute(API_URL, args => {
+        return fetch(args.event.request)
+            .then(response => {
+                const clonedResponse = response.clone();
+                clearAllData('selfies')
+                    .then(() => clonedResponse.json())
+                    .then(selfies => {
+                        for (const selfie in selfies) {
+                            writeData('selfies', selfies[selfie]);
+                        }
+                    });
+                return response;
+            });
+    });
+
+    self.addEventListener('sync', event => {
+        console.log('[Service Worker] Background syncing', event);
+        if (event.tag === 'sync-new-selfies') {
+            console.log('[Service Worker] Syncing new Posts');
+            event.waitUntil(
+                readAllData('sync-selfies')
+                    .then(syncSelfies => {
+                        for (const syncSelfie of syncSelfies) {
+                            const postData = new FormData();
+                            postData.append('id', syncSelfie.id);
+                            postData.append('title', syncSelfie.title);
+                            postData.append('location', syncSelfie.location);
+                            postData.append('selfie', syncSelfie.selfie);
+
+                            fetch(API_URL, {method: 'POST', body: postData})
+                                .then(response => {
+                                    console.log('Sent data', response);
+                                    if (response.ok) {
+                                        response.json()
+                                            .then(resData => {
+                                                deleteItemFromData('sync-selfies', parseInt(resData.id));
+                                            });
+                                    }
+                                })
+                                .catch(error => console.log('Error while sending data', error));
+                        }
+                    })
+            );
+        }
+    });
+
+    workbox.routing.registerRoute(
         routeData => routeData.event.request.headers.get('accept').includes('text/html'),
         args => {
             return caches.match(args.event.request)
@@ -108,3 +162,57 @@ if (workbox) {
 } else {
     console.log(`Boo! Workbox didn't load 😬`);
 }
+
+self.addEventListener('notificationclick', event => {
+    const notification = event.notification;
+    const action = event.action;
+
+    console.log(notification);
+
+    if (action === 'confirm') {
+        console.log('Confirm was chosen');
+        notification.close();
+    } else {
+        event.waitUntil(
+            self.clients.matchAll()
+                .then(clients => {
+                    let visibleClient = clients.find(client => client.visibilityState === 'visible');
+
+                    if (visibleClient && 'navigate' in visibleClient) {
+                        visibleClient.navigate(notification.data.url);
+                        visibleClient.focus();
+                    } else {
+                        self.clients.openWindow(`fe-guild-2019-pwa/${notification.data.url}`);
+                    }
+                    notification.close();
+                })
+        );
+        console.log(action);
+        notification.close();
+    }
+});
+
+self.addEventListener('notificationclose', event => console.log('Notification was closed', event));
+
+self.addEventListener('push', event => {
+    console.log('Push Notification received', event);
+
+    let data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
+
+    if (event.data) {
+        data = JSON.parse(event.data.text());
+    }
+
+    const options = {
+        body: data.content,
+        icon: 'src/images/icons/app-icon-96x96.png',
+        badge: 'src/images/icons/app-icon-96x96.png',
+        data: {
+            url: data.openUrl
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});

@@ -1,4 +1,6 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js');
+importScripts('src/lib/idb.js');
+importScripts('src/js/utility.js');
 
 if (workbox) {
     console.log(`Yay! Workbox is loaded 🎉`);
@@ -10,7 +12,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "2e592b8403fc71d37477b0b5101af548"
+    "revision": "a77f953428b516e0393348e1fc69a72e"
   },
   {
     "url": "manifest.json",
@@ -22,11 +24,11 @@ if (workbox) {
   },
   {
     "url": "src/css/app.css",
-    "revision": "574e324013279b516504023455b26b32"
+    "revision": "078758ce0ac18d3ff6180aa4844244ab"
   },
   {
     "url": "src/css/feed.css",
-    "revision": "ef5b292641220d93e7923dc79c254969"
+    "revision": "10167930de1d512329f5ec9eccd03dd9"
   },
   {
     "url": "src/css/help.css",
@@ -34,11 +36,19 @@ if (workbox) {
   },
   {
     "url": "src/js/app.js",
-    "revision": "7c2fe4be27096194a1c1243b675891e5"
+    "revision": "092c9bfab7feb9a3e23554a7a3a715fe"
   },
   {
     "url": "src/js/feed.js",
-    "revision": "33f562cd8a8942e79e167d6bd390b920"
+    "revision": "9e41aa7afd910ba8359768b583514c44"
+  },
+  {
+    "url": "src/js/utility.js",
+    "revision": "b3c5fe563ec484b3443242e368011d9f"
+  },
+  {
+    "url": "src/lib/idb.js",
+    "revision": "7d6f6a38f24b0f9aabf756f7736b1e36"
   },
   {
     "url": "src/lib/material.indigo-deep_orange.min.css",
@@ -124,6 +134,58 @@ if (workbox) {
         }));
 
     workbox.routing.registerRoute(
+        new RegExp(`${SERVER_URL}/(images|dummy)/*`),
+        workbox.strategies.staleWhileRevalidate({
+            cacheName: 'selfie-images'
+        }));
+
+    workbox.routing.registerRoute(API_URL, args => {
+        return fetch(args.event.request)
+            .then(response => {
+                const clonedResponse = response.clone();
+                clearAllData('selfies')
+                    .then(() => clonedResponse.json())
+                    .then(selfies => {
+                        for (const selfie in selfies) {
+                            writeData('selfies', selfies[selfie]);
+                        }
+                    });
+                return response;
+            });
+    });
+
+    self.addEventListener('sync', event => {
+        console.log('[Service Worker] Background syncing', event);
+        if (event.tag === 'sync-new-selfies') {
+            console.log('[Service Worker] Syncing new Posts');
+            event.waitUntil(
+                readAllData('sync-selfies')
+                    .then(syncSelfies => {
+                        for (const syncSelfie of syncSelfies) {
+                            const postData = new FormData();
+                            postData.append('id', syncSelfie.id);
+                            postData.append('title', syncSelfie.title);
+                            postData.append('location', syncSelfie.location);
+                            postData.append('selfie', syncSelfie.selfie);
+
+                            fetch(API_URL, {method: 'POST', body: postData})
+                                .then(response => {
+                                    console.log('Sent data', response);
+                                    if (response.ok) {
+                                        response.json()
+                                            .then(resData => {
+                                                deleteItemFromData('sync-selfies', parseInt(resData.id));
+                                            });
+                                    }
+                                })
+                                .catch(error => console.log('Error while sending data', error));
+                        }
+                    })
+            );
+        }
+    });
+
+    workbox.routing.registerRoute(
         routeData => routeData.event.request.headers.get('accept').includes('text/html'),
         args => {
             return caches.match(args.event.request)
@@ -165,3 +227,57 @@ if (workbox) {
 } else {
     console.log(`Boo! Workbox didn't load 😬`);
 }
+
+self.addEventListener('notificationclick', event => {
+    const notification = event.notification;
+    const action = event.action;
+
+    console.log(notification);
+
+    if (action === 'confirm') {
+        console.log('Confirm was chosen');
+        notification.close();
+    } else {
+        event.waitUntil(
+            self.clients.matchAll()
+                .then(clients => {
+                    let visibleClient = clients.find(client => client.visibilityState === 'visible');
+
+                    if (visibleClient && 'navigate' in visibleClient) {
+                        visibleClient.navigate(notification.data.url);
+                        visibleClient.focus();
+                    } else {
+                        self.clients.openWindow(`fe-guild-2019-pwa/${notification.data.url}`);
+                    }
+                    notification.close();
+                })
+        );
+        console.log(action);
+        notification.close();
+    }
+});
+
+self.addEventListener('notificationclose', event => console.log('Notification was closed', event));
+
+self.addEventListener('push', event => {
+    console.log('Push Notification received', event);
+
+    let data = {title: 'New!', content: 'Something new happened!', openUrl: '/'};
+
+    if (event.data) {
+        data = JSON.parse(event.data.text());
+    }
+
+    const options = {
+        body: data.content,
+        icon: 'src/images/icons/app-icon-96x96.png',
+        badge: 'src/images/icons/app-icon-96x96.png',
+        data: {
+            url: data.openUrl
+        }
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
