@@ -40,7 +40,7 @@ if (workbox) {
   },
   {
     "url": "src/js/feed.js",
-    "revision": "9e41aa7afd910ba8359768b583514c44"
+    "revision": "df8e269ce8394192345ed581d6cf4675"
   },
   {
     "url": "src/js/utility.js",

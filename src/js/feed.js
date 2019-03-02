@@ -29,8 +29,9 @@ const initializeMedia = () => {
         };
     }
 
-    navigator.mediaDevices.getUserMedia({video: true})
+    navigator.mediaDevices.getUserMedia({video: true, audio: false})
         .then(stream => {
+            const videoTracks = stream.getVideoTracks();
             videoPlayer.srcObject = stream;
             videoPlayer.style.display = 'block';
         })
