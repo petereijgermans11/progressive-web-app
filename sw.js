@@ -12,7 +12,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "a77f953428b516e0393348e1fc69a72e"
+    "revision": "48e487bf2c2346fdb054c5e1e7459d2a"
   },
   {
     "url": "manifest.json",
@@ -40,7 +40,7 @@ if (workbox) {
   },
   {
     "url": "src/js/feed.js",
-    "revision": "528f64f0961b9278f9549b00e8758f49"
+    "revision": "41b7ab94de47fa88cda9c12cf21197f3"
   },
   {
     "url": "src/js/utility.js",
@@ -270,6 +270,7 @@ self.addEventListener('push', event => {
 
     const options = {
         body: data.content,
+        image: data.imageUrl,
         icon: 'src/images/icons/app-icon-96x96.png',
         badge: 'src/images/icons/app-icon-96x96.png',
         data: {

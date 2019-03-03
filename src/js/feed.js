@@ -6,11 +6,20 @@ const titleInput = document.querySelector('#title');
 const locationInput = document.querySelector('#location');
 const sharedMomentsArea = document.querySelector('#shared-moments');
 const imagePicker = document.querySelector('#image-picker');
+const imagePickerArea = document.querySelector('#pick-image');
 const videoPlayer = document.querySelector('#player');
 const canvasElement = document.querySelector('#canvas');
 const captureButton = document.querySelector('#capture-btn');
-const imagePickerArea = document.querySelector('#pick-image');
+const locationButton = document.querySelector('#location-btn');
+const locationLoader = document.querySelector('#location-loader');
+let fetchedLocation = {lat: 0, lng: 0};
 let picture;
+
+const initializeLocation = () => {
+    if (!('geolocation' in navigator)) {
+        locationButton.style.display = 'none';
+    }
+};
 
 const initializeMedia = () => {
     if (!('mediaDevices' in navigator)) {
@@ -29,7 +38,7 @@ const initializeMedia = () => {
         };
     }
 
-    navigator.mediaDevices.getUserMedia({video: { facingMode: 'user'}, audio: false})
+    navigator.mediaDevices.getUserMedia({video: {facingMode: 'user'}, audio: false})
         .then(stream => {
             videoPlayer.srcObject = stream;
             videoPlayer.style.display = 'block';
@@ -73,6 +82,8 @@ const closeCreatePostModal = () => {
     videoPlayer.style.display = 'none';
     canvasElement.style.display = 'none';
     captureButton.style.display = 'inline';
+    locationButton.style.display = 'inline';
+    locationLoader.style.display = 'none';
     if (videoPlayer.srcObject) {
         videoPlayer.srcObject.getVideoTracks().forEach(track => track.stop());
     }
@@ -177,6 +188,49 @@ captureButton.addEventListener('click', event => {
     );
     videoPlayer.srcObject.getVideoTracks().forEach(track => track.stop());
     picture = dataURItoBlob(canvasElement.toDataURL());
+});
+
+locationButton.addEventListener('click', event => {
+    if (!('geolocation' in navigator)) {
+        return;
+    }
+    let sawAlert = false;
+
+    locationButton.style.display = 'none';
+    locationLoader.style.display = 'block';
+
+    navigator.geolocation.getCurrentPosition(position => {
+        locationButton.style.display = 'inline';
+        locationLoader.style.display = 'none';
+        fetchedLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+
+        const reverseGeocodeService = 'https://nominatim.openstreetmap.org/reverse';
+        fetch(`${reverseGeocodeService}?format=jsonv2&lat=${fetchedLocation.lat}&lon=${fetchedLocation.lng}`)
+            .then(response => response.json())
+            .then(data => {
+                locationInput.value = `${data.address.country}, ${data.address.state}`;
+                document.querySelector('#manual-location').classList.add('is-focused');
+            })
+            .catch(error => {
+                console.log(error);
+                locationButton.style.display = 'inline';
+                locationLoader.style.display = 'none';
+                if (!sawAlert) {
+                    alert('Couldn\'t fetch location, please enter manually!');
+                    sawAlert = true;
+                }
+                fetchedLocation = {lat: 0, lng: 0};
+            });
+    }, error => {
+        console.log(error);
+        locationButton.style.display = 'inline';
+        locationLoader.style.display = 'none';
+        if (!sawAlert) {
+            alert('Couldn\'t fetch location, please enter manually!');
+            sawAlert = true;
+        }
+        fetchedLocation = {lat: 0, lng: 0};
+    }, {timeout: 7000});
 });
 
 imagePicker.addEventListener('change', event => picture = event.target.files[0]);
