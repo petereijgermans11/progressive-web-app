@@ -205,6 +205,7 @@ self.addEventListener('push', event => {
 
     const options = {
         body: data.content,
+        image: data.imageUrl,
         icon: 'src/images/icons/app-icon-96x96.png',
         badge: 'src/images/icons/app-icon-96x96.png',
         data: {
