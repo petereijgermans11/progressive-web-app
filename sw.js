@@ -12,7 +12,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "48e487bf2c2346fdb054c5e1e7459d2a"
+    "revision": "79705c1abfe41fb9c0296fac4a9e42c1"
   },
   {
     "url": "manifest.json",
@@ -28,7 +28,7 @@ if (workbox) {
   },
   {
     "url": "src/css/feed.css",
-    "revision": "10167930de1d512329f5ec9eccd03dd9"
+    "revision": "49e09cd6483863b1dbdae912e4f9c9c4"
   },
   {
     "url": "src/css/help.css",
@@ -36,15 +36,15 @@ if (workbox) {
   },
   {
     "url": "src/js/app.js",
-    "revision": "092c9bfab7feb9a3e23554a7a3a715fe"
+    "revision": "7099352376ba349f4af86090f3bdeb62"
   },
   {
     "url": "src/js/feed.js",
-    "revision": "41b7ab94de47fa88cda9c12cf21197f3"
+    "revision": "37e0d086fd57065b2573f630214f6346"
   },
   {
     "url": "src/js/utility.js",
-    "revision": "b3c5fe563ec484b3443242e368011d9f"
+    "revision": "fec5c4abad8b9c4836b93dec1489e4d5"
   },
   {
     "url": "src/lib/idb.js",
