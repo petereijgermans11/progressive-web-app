@@ -12,7 +12,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "e11632e98772fae52683c61ffb4932eb"
+    "revision": "48e487bf2c2346fdb054c5e1e7459d2a"
   },
   {
     "url": "manifest.json",
@@ -28,7 +28,7 @@ if (workbox) {
   },
   {
     "url": "src/css/feed.css",
-    "revision": "9a683ea9c6fb0e77e78db33c51b987f7"
+    "revision": "10167930de1d512329f5ec9eccd03dd9"
   },
   {
     "url": "src/css/help.css",
@@ -36,15 +36,15 @@ if (workbox) {
   },
   {
     "url": "src/js/app.js",
-    "revision": "867f91eebbb4af800fff4277dec4b728"
+    "revision": "092c9bfab7feb9a3e23554a7a3a715fe"
   },
   {
     "url": "src/js/feed.js",
-    "revision": "9c3196ce4b51edb3ce2aa756fa615109"
+    "revision": "41b7ab94de47fa88cda9c12cf21197f3"
   },
   {
     "url": "src/js/utility.js",
-    "revision": "fe2feed98722cdd659efb4eb15c4804a"
+    "revision": "b3c5fe563ec484b3443242e368011d9f"
   },
   {
     "url": "src/lib/idb.js",
@@ -270,6 +270,7 @@ self.addEventListener('push', event => {
 
     const options = {
         body: data.content,
+        image: data.imageUrl,
         icon: 'src/images/icons/app-icon-96x96.png',
         badge: 'src/images/icons/app-icon-96x96.png',
         data: {

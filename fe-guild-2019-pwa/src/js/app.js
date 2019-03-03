@@ -177,7 +177,7 @@ const unsubscribe = () => {
                 }
                 return subscription.unsubscribe();
             })
-            .then(() => console.log("Successfully unsubscribed!.")
+            .then(() => console.log("Successfully unsubscribed!."))
             .catch(error => console.error('Error thrown while unsubscribing from push messaging', error));
     }
 };

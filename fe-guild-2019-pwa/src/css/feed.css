@@ -12,6 +12,25 @@
     transition: transform 0.3s;
 }
 
+#create-post video, #create-post canvas {
+    width: 512px;
+    max-width: 100%;
+    display: none;
+    margin: auto;
+}
+
+#create-post #pick-image, #create-post #location-loader {
+    display: none;
+}
+
+#create-post #capture-btn {
+    margin: 10px auto;
+}
+
+.mdl-spinner {
+    margin: auto;
+}
+
 .main-image {
     max-width: 100%;
     margin: auto;
