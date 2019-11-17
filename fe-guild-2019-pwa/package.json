@@ -1,0 +1,26 @@
+{
+    "name": "fe-guild-2019-pwa",
+    "version": "1.0.0",
+    "description": "Solution for the FE Guild 2019 PWA Workshop code labs.",
+    "scripts": {
+        "start": "http-server -c0",
+        "build": "workbox injectManifest workbox-config.js",
+        "deploy": "npm run build && gh-pages -d fe-guild-2019-pwa"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/raduenuca/fe-guild-2019-pwa.git"
+    },
+    "author": "Radu Enuca",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/raduenuca/fe-guild-2019-pwa/issues"
+    },
+    "homepage": "https://github.com/raduenuca/fe-guild-2019-pwa#readme",
+    "devDependencies": {
+        "gh-pages": "^2.0.1",
+        "http-server": "^0.11.1",
+        "workbox-cli": "^3.6.3"
+    },
+    "dependencies": {}
+}
