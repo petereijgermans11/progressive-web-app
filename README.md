@@ -1,5 +1,6 @@
 # Code for the FE Guild 2019 PWA Workshop
 
+If you didn't do it already: Fork and then Clone the following repository: https://github.com/The-Guide/fe-guild-2019-pwa.git
 This repository contains the solution for the FE Guild 2019 PWA Workshop code labs.
 
 ## How to Use
