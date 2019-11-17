@@ -1,0 +1,32 @@
+{
+    "name": "fe-guild-2019-pwa-server",
+    "version": "1.0.0",
+    "description": "Server App for the Front End Guild 2019 PWA Workshop",
+    "main": "server.js",
+    "scripts": {
+        "dev": "nodemon server.js",
+        "web-push": "web-push generate-vapid-keys"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/raduenuca/fe-guild-2019-pwa-server.git"
+    },
+    "author": "Radu Enuca",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/raduenuca/fe-guild-2019-pwa-server/issues"
+    },
+    "homepage": "https://github.com/raduenuca/fe-guild-2019-pwa-server#readme",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.16.4",
+        "express-formidable": "^1.2.0",
+        "formidable": "^1.2.1",
+        "node-json-db": "^0.9.2",
+        "uuid": "^3.3.2",
+        "web-push": "^3.3.3"
+    },
+    "devDependencies": {
+        "nodemon": "^1.18.9"
+    }
+}
