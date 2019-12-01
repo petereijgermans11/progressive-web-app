@@ -5,16 +5,9 @@
   "scripts": {
     "start": "http-server -c-1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/raduenuca/fe-guild-2019-pwa.git"
-  },
-  "author": "Radu Enuca",
+  "author": "Peter Eijgermans",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/raduenuca/fe-guild-2019-pwa/issues"
-  },
-  "homepage": "https://github.com/raduenuca/fe-guild-2019-pwa#readme",
+
   "devDependencies": {
     "http-server": "^0.11.1"
   }
