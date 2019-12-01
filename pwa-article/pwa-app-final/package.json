@@ -7,7 +7,6 @@
   },
   "author": "Peter Eijgermans",
   "license": "ISC",
-
   "devDependencies": {
     "http-server": "^0.11.1"
   }
