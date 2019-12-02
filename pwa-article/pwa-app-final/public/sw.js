@@ -13,10 +13,12 @@ self.addEventListener('fetch', event => {
   console.log('[Service Worker] Fetching something ....', event);
 
   event.respondWith(
+    
       caches.match(event.request)
           .then(response => {
               if (response) {
-                  console.log(response);
+                console.log('fetch req: ', event.request);
+                  console.log('fetch resp: ', response);
                   return response;
               }
 
