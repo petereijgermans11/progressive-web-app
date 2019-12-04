@@ -2,7 +2,7 @@
 
 If you didn't do it already: Fork and then Clone the following repository: https://github.com/petereijgermans11/progressive-web-app
 
-And go to folder: cd pwa-app-manifest-init
+And go to folder: cd pwa-article/pwa-app-manifest-init
 
 
 ## How to Use
