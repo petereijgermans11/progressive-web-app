@@ -5,7 +5,6 @@ const form = document.querySelector('form');
 const titleInput = document.querySelector('#title');
 const locationInput = document.querySelector('#location');
 const sharedMomentsArea = document.querySelector('#shared-moments');
-const imagePickerArea = document.querySelector('#pick-image');
 const videoPlayer = document.querySelector('#player');
 const canvasElement = document.querySelector('#canvas');
 const captureButton = document.querySelector('#capture-btn');
@@ -48,13 +47,13 @@ const initializeMedia = () => {
         })
         .catch(error => {
             console.log(error);
-            imagePickerArea.style.display = 'block';
         });
 };
 
 const openCreatePostModal = () => {
     setTimeout(() => createPostArea.style.transform = 'translateY(0)', 1);
     initializeMedia();
+    initializeLocation();
 
     if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -78,7 +77,6 @@ const openCreatePostModal = () => {
 };
 
 const closeCreatePostModal = () => {
-    //imagePickerArea.style.display = 'none';
     videoPlayer.style.display = 'none';
     canvasElement.style.display = 'none';
     captureButton.style.display = 'inline';
