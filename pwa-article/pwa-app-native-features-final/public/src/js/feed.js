@@ -5,7 +5,6 @@ const form = document.querySelector('form');
 const titleInput = document.querySelector('#title');
 const locationInput = document.querySelector('#location');
 const sharedMomentsArea = document.querySelector('#shared-moments');
-const imagePicker = document.querySelector('#image-picker');
 const imagePickerArea = document.querySelector('#pick-image');
 const videoPlayer = document.querySelector('#player');
 const canvasElement = document.querySelector('#canvas');
