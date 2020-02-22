@@ -1,0 +1,20 @@
+{
+  "name": "Progressive Selfies",
+  "short_name": "PWA Selfies",
+  "icons": [
+    {
+      "src": "/src/images/icons/app-icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/src/images/icons/app-icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.html",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#fff"
+}
