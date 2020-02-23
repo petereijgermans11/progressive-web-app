@@ -129,16 +129,7 @@ form.addEventListener('submit', event => {
                         console.log(err);
                     });
             });
-    } else {
-      const postData = new FormData();
-      postData.append('id', id);
-      postData.append('title', titleInput.value);
-      postData.append('location', locationInput.value);
-      postData.append('selfie', picture);
-
-      fetch(API_URL, {method: 'POST', body: postData})
-          .then(response => console.log('Sent data', response));
-  }
+    }
 });
 
 captureButton.addEventListener('click', event => {
