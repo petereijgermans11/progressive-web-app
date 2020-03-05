@@ -12,7 +12,6 @@ const locationButton = document.querySelector('#location-btn');
 const locationLoader = document.querySelector('#location-loader');
 let fetchedLocation = {lat: 0, lng: 0};
 let picture;
-let deferredPrompt;
 
 const initializeLocation = () => {
     if (!('geolocation' in navigator)) {
@@ -54,26 +53,6 @@ const openCreatePostModal = () => {
     setTimeout(() => createPostArea.style.transform = 'translateY(0)', 1);
     initializeMedia();
     initializeLocation();
-
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-
-        // Determine the user's choice - returned as a Promise
-        deferredPrompt.userChoice.then(result => {
-            console.log(result.outcome);
-
-            // Based on the user's choice, decide how to proceed
-            if (result.outcome === 'dismissed') {
-                // Send to analytics
-                console.log('User cancelled installation');
-            } else {
-                // Send to analytics
-                console.log('User added to home screen');
-            }
-        });
-
-        deferredPrompt = null;
-    }
 };
 
 const closeCreatePostModal = () => {
