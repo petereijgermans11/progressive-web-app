@@ -3,15 +3,8 @@
 const SERVER_URL = 'http://localhost:3000';
 const API_URL = `${SERVER_URL}/selfies`;
 
-const dbPromise = idb.openDb('selfies-store', 1, upgradeDB => {
-    if (!upgradeDB.objectStoreNames.contains('selfies')) {
-        upgradeDB.createObjectStore('selfies', {keyPath: 'id'});
-    }
+// ADD dbPromise HERE !
 
-    if (!upgradeDB.objectStoreNames.contains('sync-selfies')) {
-        upgradeDB.createObjectStore('sync-selfies', {keyPath: 'id'});
-    }
-});
 
 const writeData = (storeName, data) => {
     return dbPromise
@@ -53,16 +46,4 @@ const deleteItemFromData = (storeName, id) => {
         .then(() => console.log('Item deleted!'));
 };
 
-
-const dataURItoBlob= dataURI => {
-  const byteString = atob(dataURI.split(',')[1]);
-  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-  }
-  const blob = new Blob([ab], {type: mimeString});
-  return blob;
- };
- 
+// ADD dataURItoBlob HERE !

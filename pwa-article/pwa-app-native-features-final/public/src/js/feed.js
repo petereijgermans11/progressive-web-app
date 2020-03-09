@@ -74,7 +74,7 @@ closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
 form.addEventListener('submit', event => {
     event.preventDefault();
 
-    if (titleInput.value.trim() === '' || locationInput.value.trim() === '') {
+    if (titleInput.value.trim() === '' || locationInput.value.trim() === '' || !picture) {
         // Very professional validation
         alert('Please enter valid data!');
         return;
