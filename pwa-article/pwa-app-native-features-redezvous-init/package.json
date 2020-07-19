@@ -1,0 +1,13 @@
+{
+  "name": "fe-guild-2019-pwa",
+  "version": "1.0.0",
+  "description": "Solution for the FE Guild 2019 PWA Workshop code labs.",
+  "scripts": {
+    "start": "http-server -c-1"
+  },
+  "author": "Peter Eijgermans",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}
