@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-deep_orange.min.css"/>
     <link rel="stylesheet" href="src/css/app.css">
     <link rel="stylesheet" href="src/css/feed.css">
+    <link rel="stylesheet" href="src/css/speech.css">
     <link rel="manifest" href="/manifest.json">
 </head>
 <body>
@@ -60,11 +61,44 @@
                     class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
                     Capture
                 </button>
+
                 <form>
-                    <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="title">
-                        <label class="mdl-textfield__label" for="title" name="title">Title</label>
+                    <div id="info">
+                        <p id="info_start">Click on the microphone icon and begin speaking.</p>
+                        <p id="info_speak_now">Speak now.</p>
+                        <p id="info_no_speech">No speech was detected. You may need to adjust your
+                            <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+                                microphone settings</a>.</p>
+                        <p id="info_no_microphone" style="display:none">
+                            No microphone was found. Ensure that a microphone is installed and that
+                            <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+                                microphone settings</a> are configured correctly.</p>
+                        <p id="info_allow">Click the "Allow" button above to enable your microphone.</p>
+                        <p id="info_denied">Permission to use microphone was denied.</p>
+                        <p id="info_blocked">Permission to use microphone is blocked. To change,
+                            go to chrome://settings/contentExceptions#media-stream</p>
+                        <p id="info_upgrade">Web Speech API is not supported by this browser.
+                            Upgrade to <a href="//www.google.com/chrome">Chrome</a>
+                            version 25 or later.</p>
                     </div>
+                    <div class="right">
+                        <button id="start_button" onclick="startButton(event)">
+                            <img id="start_img" src="./src/images/mic.gif" alt="Start"></button>
+                    </div>
+                    <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label div_speech_to_text">
+                        <span id="title" contenteditable="true" class="final"></span>
+                        <span id="interim_span" class="interim"></span>
+                        <p>
+                    </div>
+                    <div class="center">
+                        <p>
+                        <div id="div_language">
+                            <select id="select_language" onchange="updateCountry()"></select>
+                            <select id="select_dialect"></select>
+                        </div>
+                    </div>
+
+
                     <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
                          id="manual-location">
                         <input class="mdl-textfield__input" type="text" id="location">
@@ -100,7 +134,10 @@
                             <i class="material-icons">close</i>
                         </button>
                     </div>
+                    <br>
+
                 </form>
+
             </div>
             <img src="src/images/main-image.jpg"
                  srcset="src/images/main-image-lg.jpg 1200w,
@@ -131,5 +168,6 @@
 <script src="src/js/utility.js"></script>
 <script src="src/js/app.js"></script>
 <script src="src/js/feed.js"></script>
+<script src="src/js/speech.js"></script>
 </body>
 </html>

@@ -2,7 +2,6 @@ const shareImageButton = document.querySelector('#share-image-button');
 const createPostArea = document.querySelector('#create-post');
 const closeCreatePostModalButton = document.querySelector('#close-create-post-modal-btn');
 const form = document.querySelector('form');
-const titleInput = document.querySelector('#title');
 const locationInput = document.querySelector('#location');
 const sharedMomentsArea = document.querySelector('#shared-moments');
 const videoPlayer = document.querySelector('#player');
@@ -74,8 +73,8 @@ closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
 
 form.addEventListener('submit', event => {
     event.preventDefault();
-
-    if (titleInput.value.trim() === '' || locationInput.value.trim() === '' || !picture) {
+    const titleInput = title.innerHTML;
+    if (titleInput.trim() === '' || locationInput.value.trim() === '' || !picture) {
         // Very professional validation
         alert('Please enter valid data!');
         return;
@@ -90,7 +89,7 @@ form.addEventListener('submit', event => {
             .then(sw => {
                 const selfie = {
                     id: id,
-                    title: titleInput.value,
+                    title: titleInput,
                     location: locationInput.value,
                     selfie: picture,
                 };
@@ -136,6 +135,31 @@ captureButton.addEventListener('click', event => {
     );
     videoPlayer.srcObject.getVideoTracks().forEach(track => track.stop());
     picture = dataURItoBlob(canvasElement.toDataURL());
+
+    if (window.FaceDetector == undefined) {
+        console.error('Face Detection not supported');
+        return;
+    }
+
+    const scale = 1;
+    const faceDetector = new FaceDetector();
+    faceDetector.detect(canvasElement)
+        .then(faces => {
+            // Draw the faces on the <canvas>.
+
+            context.lineWidth = 2;
+            context.strokeStyle = 'red';
+            for(let face of faces) {
+                context.rect(Math.floor(face.x * scale),
+                    Math.floor(face.y * scale),
+                    Math.floor(face.width * scale),
+                    Math.floor(face.height * scale));
+                context.stroke();
+            }
+        })
+        .catch((e) => {
+            console.error("Boo, Face Detection failed: " + e);
+        });
 });
 
 locationButton.addEventListener('click', event => {
