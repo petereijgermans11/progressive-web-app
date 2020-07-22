@@ -1,7 +1,7 @@
 {
-  "name": "fe-guild-2019-pwa",
+  "name": "pwa",
   "version": "1.0.0",
-  "description": "Solution for the FE Guild 2019 PWA Workshop code labs.",
+  "description": "PWA Workshop",
   "scripts": {
     "start": "http-server -c-1"
   },
