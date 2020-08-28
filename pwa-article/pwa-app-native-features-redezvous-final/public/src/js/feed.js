@@ -55,7 +55,7 @@ const startVideo = () => {
         .catch(error => {
             console.log(error);
         });
-}
+};
 
 const openCreatePostModal = () => {
     setTimeout(() => createPostArea.style.transform = 'translateY(0)', 1);
