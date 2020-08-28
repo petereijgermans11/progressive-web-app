@@ -9,7 +9,6 @@ const canvasElement = document.querySelector('#canvas');
 const captureButton = document.querySelector('#capture-btn');
 const locationButton = document.querySelector('#location-btn');
 const locationLoader = document.querySelector('#location-loader');
-const detectface = document.querySelector('#detectface');
 let fetchedLocation = {lat: 0, lng: 0};
 let picture;
 
@@ -35,7 +34,16 @@ const initializeMedia = () => {
             return new Promise((resolve, reject) => getUserMedia.call(navigator, constraints, resolve, reject));
         };
     }
+    Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri("/src/models"),
+        faceapi.nets.faceLandmark68Net.loadFromUri("/src/models"),
+        faceapi.nets.faceRecognitionNet.loadFromUri("/src/models"),
+        faceapi.nets.faceExpressionNet.loadFromUri("/src/models"),
+        faceapi.nets.ageGenderNet.loadFromUri("/src/models")
+    ]).then(startVideo);
+};
 
+const startVideo = () => {
     navigator.mediaDevices.getUserMedia({video: {facingMode: 'user'}, audio: false})
         .then(stream => {
             videoPlayer.srcObject = stream;
@@ -47,7 +55,7 @@ const initializeMedia = () => {
         .catch(error => {
             console.log(error);
         });
-};
+}
 
 const openCreatePostModal = () => {
     setTimeout(() => createPostArea.style.transform = 'translateY(0)', 1);
@@ -111,20 +119,6 @@ form.addEventListener('submit', event => {
     }
 });
 
-detectface.addEventListener('click', event => {
-    if (window.FaceDetector == undefined) {
-        console.error('Face Detection not supported');
-        return;
-    }
-    const image = document.getElementById("canvas");
-    let faceDetector = new FaceDetector();
-    faceDetector.detect(image)
-        .then(faces => faces.forEach(face => console.log(face)))
-        .catch(e => {
-            console.error("Boo, Face Detection failed: " + e);
-        });
-});
-
 captureButton.addEventListener('click', event => {
     canvasElement.style.display = 'block';
     videoPlayer.style.display = 'none';
@@ -135,31 +129,6 @@ captureButton.addEventListener('click', event => {
     );
     videoPlayer.srcObject.getVideoTracks().forEach(track => track.stop());
     picture = dataURItoBlob(canvasElement.toDataURL());
-
-    if (window.FaceDetector == undefined) {
-        console.error('Face Detection not supported');
-        return;
-    }
-
-    const scale = 1;
-    const faceDetector = new FaceDetector();
-    faceDetector.detect(canvasElement)
-        .then(faces => {
-            // Draw the faces on the <canvas>.
-
-            context.lineWidth = 2;
-            context.strokeStyle = 'red';
-            for(let face of faces) {
-                context.rect(Math.floor(face.x * scale),
-                    Math.floor(face.y * scale),
-                    Math.floor(face.width * scale),
-                    Math.floor(face.height * scale));
-                context.stroke();
-            }
-        })
-        .catch((e) => {
-            console.error("Boo, Face Detection failed: " + e);
-        });
 });
 
 locationButton.addEventListener('click', event => {
