@@ -84,7 +84,7 @@ form.addEventListener('submit', event => {
     const titleInput = title.innerHTML;
     if (titleInput.trim() === '' || locationInput.value.trim() === '' || !picture) {
         // Very professional validation
-        alert('Please enter valid data!');
+        alert('Please enter valid data in the inputfields and make a Selfie!');
         return;
     }
 
