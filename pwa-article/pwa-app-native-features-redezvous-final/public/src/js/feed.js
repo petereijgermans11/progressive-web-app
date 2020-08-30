@@ -112,7 +112,7 @@ form.addEventListener('submit', event => {
                               updateUI(syncSelfies);
                             })
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                         console.log(err);
                     });
             });

@@ -2,7 +2,6 @@ const shareImageButton = document.querySelector('#share-image-button');
 const createPostArea = document.querySelector('#create-post');
 const closeCreatePostModalButton = document.querySelector('#close-create-post-modal-btn');
 const form = document.querySelector('form');
-const titleInput = document.querySelector('#title');
 const locationInput = document.querySelector('#location');
 const sharedMomentsArea = document.querySelector('#shared-moments');
 const videoPlayer = document.querySelector('#player');
@@ -35,6 +34,10 @@ const initializeMedia = () => {
             return new Promise((resolve, reject) => getUserMedia.call(navigator, constraints, resolve, reject));
         };
     }
+
+    // Load all models with Promise.all() and finally call the function startvideo !!!
+
+    // Copy this code (line 42 till 52) to a new function with the name: startvideo
 
     navigator.mediaDevices.getUserMedia({video: {facingMode: 'user'}, audio: false})
         .then(stream => {
@@ -73,10 +76,10 @@ closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
 
 form.addEventListener('submit', event => {
     event.preventDefault();
-
-    if (titleInput.value.trim() === '' || locationInput.value.trim() === '' || !picture) {
+    const titleInput = title.innerHTML;
+    if (titleInput.trim() === '' || locationInput.value.trim() === '' || !picture) {
         // Very professional validation
-        alert('Please enter valid data!');
+        alert('Please enter valid data in the inputfields and make a Selfie');
         return;
     }
 
@@ -89,7 +92,7 @@ form.addEventListener('submit', event => {
             .then(sw => {
                 const selfie = {
                     id: id,
-                    title: titleInput.value,
+                    title: titleInput,
                     location: locationInput.value,
                     selfie: picture,
                 };
@@ -104,7 +107,7 @@ form.addEventListener('submit', event => {
                               updateUI(syncSelfies);
                             })
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                         console.log(err);
                     });
             });
