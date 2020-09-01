@@ -69,9 +69,7 @@ let recognizing = false;
 let ignore_onend;
 let start_timestamp;
 let recognition;
-if (!('webkitSpeechRecognition' in window)) {
-    upgrade();
-} else {
+if ('webkitSpeechRecognition' in window) {
     start_button.style.display = 'inline-block';
     recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
@@ -81,6 +79,30 @@ if (!('webkitSpeechRecognition' in window)) {
         recognizing = true;
         showInfo('info_speak_now');
         start_img.src = './src/images/mic-animate.gif';
+    };
+
+    recognition.onresult = (event) => {
+        let interim_transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                final_transcript += event.results[i][0].transcript;
+            } else {
+                interim_transcript += event.results[i][0].transcript;
+            }
+        }
+        final_transcript = capitalize(final_transcript);
+        title.innerHTML = linebreak(final_transcript);
+        interim_span.innerHTML = linebreak(interim_transcript);
+
+    };
+
+    recognition.onend = () => {
+        recognizing = false;
+        if (ignore_onend) {
+            return;
+        }
+        start_img.src = './src/images/mic.gif';
+        showInfo('');
     };
 
     recognition.onerror = (event) => {
@@ -103,38 +125,6 @@ if (!('webkitSpeechRecognition' in window)) {
             ignore_onend = true;
         }
     };
-
-    recognition.onend = () => {
-        recognizing = false;
-        if (ignore_onend) {
-            return;
-        }
-        start_img.src = './src/images/mic.gif';
-        if (!final_transcript) {
-            showInfo('info_start');
-            return;
-        }
-        showInfo('');
-        if (window.getSelection) {
-            window.getSelection().removeAllRanges();
-            let range = document.createRange();
-            range.selectNode(document.getElementById('title'));
-            window.getSelection().addRange(range);
-        }
-    };
-
-    recognition.onresult = (event) => {
-        let interim_transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-                final_transcript += event.results[i][0].transcript;
-            } else {
-                interim_transcript += event.results[i][0].transcript;
-            }
-        }
-        final_transcript = capitalize(final_transcript);
-        title.innerHTML = linebreak(final_transcript);
-        interim_span.innerHTML = linebreak(interim_transcript);
-
-    };
+} else {
+    upgrade();
 }
