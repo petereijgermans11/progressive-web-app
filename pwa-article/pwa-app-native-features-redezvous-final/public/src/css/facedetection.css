@@ -6,7 +6,6 @@
 }
 
 .result-container {
-    border-style: groove;
     display: flex;
     width: 100%;
     justify-content: center;
