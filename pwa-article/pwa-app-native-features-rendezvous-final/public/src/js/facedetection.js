@@ -35,23 +35,25 @@ videoPlayer.addEventListener("playing", () => {
       .withFaceExpressions()
       .withAgeAndGender();
 
-    const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    if (detections) {
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
       canvasForFaceDetection.getContext("2d").clearRect(0, 0, 500, 500);
 
-    faceapi.draw.drawDetections(canvasForFaceDetection, resizedDetections);
-    faceapi.draw.drawFaceLandmarks(canvasForFaceDetection, resizedDetections);
-    if (resizedDetections && Object.keys(resizedDetections).length > 0) {
-      const age = resizedDetections.age;
-      const interpolatedAge = interpolateAgePredictions(age);
-      const gender = resizedDetections.gender;
-      const expressions = resizedDetections.expressions;
-      const maxValue = Math.max(...Object.values(expressions));
-      const emotion = Object.keys(expressions).filter(
-        item => expressions[item] === maxValue
-      );
-      document.getElementById("age").innerText = `Age - ${interpolatedAge}`;
-      document.getElementById("gender").innerText = `Gender - ${gender}`;
-      document.getElementById("emotion").innerText = `Emotion - ${emotion[0]}`;
+      faceapi.draw.drawDetections(canvasForFaceDetection, resizedDetections);
+      faceapi.draw.drawFaceLandmarks(canvasForFaceDetection, resizedDetections);
+      if (resizedDetections && Object.keys(resizedDetections).length > 0) {
+        const age = resizedDetections.age;
+        const interpolatedAge = interpolateAgePredictions(age);
+        const gender = resizedDetections.gender;
+        const expressions = resizedDetections.expressions;
+        const maxValue = Math.max(...Object.values(expressions));
+        const emotion = Object.keys(expressions).filter(
+          item => expressions[item] === maxValue
+        );
+        document.getElementById("age").innerText = `Age - ${interpolatedAge}`;
+        document.getElementById("gender").innerText = `Gender - ${gender}`;
+        document.getElementById("emotion").innerText = `Emotion - ${emotion[0]}`;
+      }
     }
-  }, 100);
+  }, 10000);
 });
