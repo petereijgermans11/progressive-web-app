@@ -55,5 +55,5 @@ videoPlayer.addEventListener("playing", () => {
         document.getElementById("emotion").innerText = `Emotion - ${emotion[0]}`;
       }
     }
-  }, 10000);
+  }, 100);
 });

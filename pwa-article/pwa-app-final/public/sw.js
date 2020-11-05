@@ -33,10 +33,16 @@ const URLS_TO_PRECACHE = [
     'index.html',
     'src/js/app.js',
     'src/js/feed.js',
+    
     'src/lib/material.min.js',
+
     'src/css/app.css',
     'src/css/feed.css',
+
+    'src/images/main-image-lg.jpg',
+    'src/images/main-image-sm.jpg',
     'src/images/main-image.jpg',
+
     'https://fonts.googleapis.com/css?family=Roboto:400,700',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
 ];

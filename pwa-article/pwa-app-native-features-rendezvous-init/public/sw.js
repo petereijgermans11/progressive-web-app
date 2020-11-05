@@ -19,8 +19,8 @@ self.addEventListener('fetch', event => {
       caches.match(event.request)
           .then(response => {
               if (response) {
-                console.log('fetch req: ', event.request);
-                  console.log('fetch resp: ', response);
+                  console.log('fetch request from CACHE: ', event.request);
+                  console.log('fetch response from CACHE: ', response);
                   return response;
               }
 
@@ -31,16 +31,48 @@ self.addEventListener('fetch', event => {
  
 const CACHE_STATIC_NAME = 'static';
 const URLS_TO_PRECACHE = [
-    '/',
-    'index.html',
-    'src/js/app.js',
-    'src/js/feed.js',
-    'src/lib/material.min.js',
-    'src/css/app.css',
-    'src/css/feed.css',
-    'src/images/main-image.jpg',
-    'https://fonts.googleapis.com/css?family=Roboto:400,700',
-    'https://fonts.googleapis.com/icon?family=Material+Icons',
+  '/',
+  'index.html',
+  'src/js/app.js',
+  'src/js/facedetection.js',
+  'src/js/feed.js',
+  'src/js/languages.js',
+  'src/js/speech.js',
+  'src/js/utility.js',
+
+  'src/lib/face-api.min.js',
+  'src/lib/idb.js',
+  'src/lib/material.min.js',    
+  
+  'src/css/app.css',
+  'src/css/facedetection.css',
+  'src/css/feed.css',
+  'src/css/help.css',
+  'src/css/speech.css',
+  
+  'src/images/main-image-lg.jpg',
+  'src/images/main-image-sm.jpg',
+  'src/images/main-image.jpg',
+  'src/images/mic-animate.gif',
+  'src/images/mic-slash.gif',
+  'src/images/mic.gif',
+
+  'src/models/age_gender_model-shard1',
+  'src/models/age_gender_model-weights_manifest.json',
+  'src/models/face_expression_model-shard1',
+  'src/models/face_expression_model-weights_manifest.json',
+  'src/models/face_landmark_68_model-shard1',
+  'src/models/face_landmark_68_model-weights_manifest.json',
+  'src/models/face_landmark_68_tiny_model-shard1',
+  'src/models/face_landmark_68_tiny_model-weights_manifest.json',
+  'src/models/face_recognition_model-shard1',
+  'src/models/face_recognition_model-shard2',
+  'src/models/face_recognition_model-weights_manifest.json',
+  'src/models/tiny_face_detector_model-shard1',
+  'src/models/tiny_face_detector_model-weights_manifest.json',
+  
+  'https://fonts.googleapis.com/css?family=Roboto:400,700',
+  'https://fonts.googleapis.com/icon?family=Material+Icons',
 ];
 
 self.addEventListener('install', event => {

@@ -19,8 +19,8 @@ self.addEventListener('fetch', event => {
       caches.match(event.request)
           .then(response => {
               if (response) {
-                console.log('fetch req: ', event.request);
-                  console.log('fetch resp: ', response);
+                  console.log('fetch request from CACHE: ', event.request);
+                  console.log('fetch response from CACHE: ', response);
                   return response;
               }
 
@@ -35,10 +35,18 @@ const URLS_TO_PRECACHE = [
     'index.html',
     'src/js/app.js',
     'src/js/feed.js',
+    'src/js/utility.js',
+
+    'src/lib/idb.js',
     'src/lib/material.min.js',
+
     'src/css/app.css',
     'src/css/feed.css',
+    
+    'src/images/main-image-lg.jpg',
+    'src/images/main-image-sm.jpg',
     'src/images/main-image.jpg',
+    
     'https://fonts.googleapis.com/css?family=Roboto:400,700',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
 ];
