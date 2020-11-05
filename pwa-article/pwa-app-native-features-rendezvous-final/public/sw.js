@@ -19,8 +19,8 @@ self.addEventListener('fetch', event => {
       caches.match(event.request)
           .then(response => {
               if (response) {
-                console.log('fetch req: ', event.request);
-                  console.log('fetch resp: ', response);
+                console.log('fetch request from CACHE: ', event.request);
+                  console.log('fetch response from CACHE: ', response);
                   return response;
               }
 
@@ -106,4 +106,8 @@ addEventListener('backgroundfetchsuccess', event => {
               })
       );
   }
+});
+
+self.addEventListener('push', event => {
+  console.log('Push Notification received!!! YES', event);
 });
