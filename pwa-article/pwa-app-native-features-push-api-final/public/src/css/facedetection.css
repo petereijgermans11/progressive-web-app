@@ -1,0 +1,31 @@
+.container-faceDetection {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.result-container > div {
+    font-size: 1.3rem;
+    padding: 0.5rem;
+    margin: 5px 0;
+    color: white;
+    text-transform: capitalize;
+}
+#age {
+    background: #1e94be;
+}
+#emotion {
+    background: #8a1025;
+}
+#gender {
+    background: #62d8a5;
+}
+

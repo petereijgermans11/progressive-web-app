@@ -1,0 +1,13 @@
+{
+  "name": "pwa",
+  "version": "1.0.0",
+  "description": "PWA Workshop native-features-redezvous",
+  "scripts": {
+    "start": "http-server -c-1"
+  },
+  "author": "Peter Eijgermans",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}
