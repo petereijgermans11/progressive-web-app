@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Progressive Selfies</title>
     <base href="/">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-deep_orange.min.css"/>
-    <link rel="stylesheet" href="src/css/app.css">
-    <link rel="stylesheet" href="src/css/feed.css">
-    <link rel="stylesheet" href="src/css/speech.css">
-    <link rel="stylesheet" href="src/css/facedetection.css">
-     <!--<link rel="manifest" href="manifest.json">-->
-     <link rel="manifest" id="manifestPlaceholder">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://code.getmdl.io/1.3.0/material.indigo-deep_orange.min.css" rel="stylesheet"/>
+    <link href="src/css/app.css" rel="stylesheet">
+    <link href="src/css/feed.css" rel="stylesheet">
+    <link href="src/css/speech.css" rel="stylesheet">
+    <link href="src/css/facedetection.css" rel="stylesheet">
+    <!--<link rel="manifest" href="manifest.json">-->
+    <link id="manifestPlaceholder" rel="manifest">
 </head>
 <body>
 
@@ -56,10 +56,10 @@
         </div>
         <main class="mdl-layout__content mat-typography">
             <div id="create-post">
-                <video id="player" autoplay></video>
+                <video autoplay id="player"></video>
                 <div class="container-faceDetection">
                 </div>
-                <canvas id="canvas" width="320px" height="240px"></canvas>
+                <canvas height="240px" id="canvas" width="320px"></canvas>
                 <div class="result-container">
                     <div id="emotion">Emotion</div>
                     <div id="gender">Gender</div>
@@ -67,8 +67,8 @@
                 </div>
                 <br/>
                 <button
-                    id="capture-btn"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    id="capture-btn">
                     Capture
                 </button>
 
@@ -93,11 +93,12 @@
                     </div>
                     <div class="right">
                         <button id="start_button" onclick="startButton(event)">
-                            <img id="start_img" src="./src/images/mic.gif" alt="Start"></button>
+                            <img alt="Start" id="start_img" src="./src/images/mic.gif"></button>
                     </div>
-                    <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label div_speech_to_text">
-                        <span id="title" contenteditable="true" class="final"></span>
-                        <span id="interim_span" class="interim"></span>
+                    <div
+                        class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label div_speech_to_text">
+                        <span class="final" contenteditable="true" id="title"></span>
+                        <span class="interim" id="interim_span"></span>
                     </div>
                     <div class="center">
                         <p>
@@ -110,26 +111,26 @@
 
                     <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
                          id="manual-location">
-                        <input class="mdl-textfield__input" type="text" id="location">
+                        <input class="mdl-textfield__input" id="location" type="text">
                         <label class="mdl-textfield__label" for="location" name="location">Location</label>
                     </div>
                     <div class="input-section">
                         <button
+                            class="mdl-button mdl-js-button mdl-button mdl-button--colored"
                             id="location-btn"
-                            type="button"
-                            class="mdl-button mdl-js-button mdl-button mdl-button--colored">
+                            type="button">
                             Get Location
                         </button>
                         <div
-                            id="location-loader"
-                            class="mdl-spinner mdl-js-spinner is-active">
+                            class="mdl-spinner mdl-js-spinner is-active"
+                            id="location-loader">
                         </div>
                     </div>
                     <br>
                     <div>
                         <button
                             class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent"
-                            type="submit" id="post-btn">Post!
+                            id="post-btn" type="submit">Post!
                         </button>
                     </div>
                     <br>
@@ -144,12 +145,12 @@
                 </form>
 
             </div>
-            <img src="src/images/main-image.jpg"
+            <img alt="Ducks everywhere"
+                 class="main-image"
+                 src="src/images/main-image.jpg"
                  srcset="src/images/main-image-lg.jpg 1200w,
                          src/images/main-image.jpg 900w,
-                         src/images/main-image-sm.jpg 480w"
-                 alt="Ducks everywhere"
-                 class="main-image">
+                         src/images/main-image-sm.jpg 480w">
             <div class="page-content">
                 <h5 class="text-center mdl-color-text--primary">Share your duck face!</h5>
                 <div id="shared-moments"></div>
@@ -160,10 +161,10 @@
                     <i class="material-icons">add</i>
                 </button>
             </div>
-            <div id="confirmation-toast" aria-live="assertive" aria-atomic="true" aria-relevant="text"
-                 class="mdl-snackbar mdl-js-snackbar">
+            <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar"
+                 id="confirmation-toast">
                 <div class="mdl-snackbar__text"></div>
-                <button type="button" class="mdl-snackbar__action"></button>
+                <button class="mdl-snackbar__action" type="button"></button>
             </div>
         </main>
     </div>
@@ -177,5 +178,6 @@
 <script src="src/js/speech.js"></script>
 <script src="src/lib/face-api.min.js"></script>
 <script src="src/js/facedetection.js"></script>
+<script src="src/js/pushapi.js"></script>
 </body>
 </html>
