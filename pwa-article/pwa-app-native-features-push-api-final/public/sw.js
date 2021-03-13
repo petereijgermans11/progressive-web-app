@@ -36,6 +36,7 @@ const URLS_TO_PRECACHE = [
     'src/js/facedetection.js',
     'src/js/feed.js',
     'src/js/languages.js',
+    'src/js/pushapi.js',
     'src/js/speech.js',
     'src/js/utility.js',
 
