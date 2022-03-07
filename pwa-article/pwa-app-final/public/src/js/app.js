@@ -51,12 +51,7 @@ const manifest = {
 
 
 window.addEventListener('load', () => {
-  const base = document.querySelector('base');
-  let baseUrl = base && base.href || '';
-
-  if (!baseUrl.endsWith('/')) {
-      baseUrl = `${baseUrl}/`;
-  }
+  let baseUrl = getBaseUrl();  // http://localhost:8080
 
   manifest['start_url'] = `${baseUrl}index.html`;
 
@@ -81,6 +76,19 @@ window.addEventListener('load', () => {
      });
  }
 
+
+ function getBaseUrl() {
+  const base = document.querySelector('base');
+  let baseUrl = base && base.href || '';
+
+  if (!baseUrl.endsWith('/')) {
+    baseUrl = `${baseUrl}/`;
+  }
+  return baseUrl;
+}
+
+
+
  bgFetchButton = document.querySelector('#bgFetchButton');
  bgFetchButton.addEventListener('click', async event => {
     try {
@@ -93,3 +101,5 @@ window.addEventListener('load', () => {
 
 
 });
+
+
